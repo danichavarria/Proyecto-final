@@ -1,18 +1,20 @@
 package org.danieska;
 
-import org.danieska.entity.Cliente;
+import org.danieska.entity.Cliente01;
+import org.danieska.entity.Supplier01;
+import org.danieska.services.GenericServiceImpl;
+import org.danieska.services.IGenericService;
 import org.danieska.util.HibernateUtil;
-import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.mariadb.jdbc.Connection;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainFrame extends JFrame {
     private final JDesktopPane desktopPane;
@@ -221,6 +223,24 @@ class ProductForm extends JInternalFrame {
         setJMenuBar(menuBar);
         setVisible(true);
     }
+    private static List<Producto> getProductos(){
+        List<Producto> productos = new ArrayList<>();
+        IGenericService<Producto> productoService = new GenericServiceImpl<>(Producto.class, HibernateUtil.getSessionFactory());
+        productos = productoService.getAll();
+        return productos;
+    }
+    private static void saveProducto(Producto producto){
+        IGenericService<Producto> productoService = new GenericServiceImpl<>(Producto.class, HibernateUtil.getSessionFactory());
+        productoService.save(producto);
+    }
+    private static void deleteProducto(Producto producto){
+        IGenericService<Producto> productoService = new GenericServiceImpl<>(Producto.class, HibernateUtil.getSessionFactory());
+        productoService.delete(producto);
+    }
+    private static void updateProducto(Producto producto){
+        IGenericService<Producto> productoService = new GenericServiceImpl<>(Producto.class, HibernateUtil.getSessionFactory());
+        productoService.update(producto);
+    }
 }
 
 class Client {
@@ -274,13 +294,16 @@ class Client {
 class ClientForm extends JInternalFrame {
     private ArrayList<Client> clientes;
     private JTextField nombreField, apellidoField, direccionField, celularField;
-
+    private Connection connection;
     public ClientForm() {
         super(" Cliente", true, true, true, true);
         clientes = new ArrayList<>();
         inicializarFormularioCliente();
 
     }
+
+
+
 
     private void inicializarFormularioCliente() {
         setSize(300, 200);
@@ -310,11 +333,14 @@ class ClientForm extends JInternalFrame {
 
         //crear botones y anadir acciones
         JButton guardarButton = new JButton("Guardar");
+
+
         guardarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 guardarCliente();
             }
+
         });
 
         JButton mostrarButton = new JButton("Mostrar Clientes");
@@ -453,6 +479,26 @@ class ClientForm extends JInternalFrame {
         direccionField.setText("");
         celularField.setText("");
     }
+     private static List<Cliente01> getCliente01(){
+         java.util.List<Cliente01> clientes = new ArrayList<>();
+         IGenericService<Cliente01> clienteService = new GenericServiceImpl<>(Cliente01.class, HibernateUtil.getSessionFactory());
+         clientes = clienteService.getAll();
+         return clientes;
+
+     }
+
+     private static void saveCliente01(Cliente01 cliente){
+        IGenericService<Cliente01> clienteService = new GenericServiceImpl<>(Cliente01.class, HibernateUtil.getSessionFactory());
+        clienteService.save(cliente);
+     }
+     private static void deleteCliente01(Cliente01 cliente){
+        IGenericService<Cliente01> clienteService = new GenericServiceImpl<>(Cliente01.class, HibernateUtil.getSessionFactory());
+        clienteService.delete(cliente);
+     }
+     private static void updateCliente01(Cliente01 cliente){
+        IGenericService<Cliente01> clienteService = new GenericServiceImpl<>(Cliente01.class, HibernateUtil.getSessionFactory());
+        clienteService.update(cliente);
+     }
 
 }
 
@@ -530,12 +576,15 @@ class SupplierForm extends JInternalFrame {
         formPanel.add(direccionField);
 
         JButton guardarButton = new JButton("Guardar");
+
+
         guardarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 guardarProveedor();
             }
         });
+
 
         JButton mostrarButton = new JButton("Mostrar Proveedores");
         mostrarButton.addActionListener(new ActionListener() {
@@ -587,7 +636,8 @@ class SupplierForm extends JInternalFrame {
         }
     }
 
-    private void mostrarProveedores() {
+
+private void mostrarProveedores() {
         if (proveedores.isEmpty()) {
             JOptionPane.showMessageDialog(this, "No hay proveedores guardados.", "Proveedores Guardados", JOptionPane.INFORMATION_MESSAGE);
         } else {
@@ -666,6 +716,26 @@ class SupplierForm extends JInternalFrame {
         celularField.setText("");
         direccionField.setText("");
     }
+
+    private  static List<Supplier> getSupplier(){
+        List<Supplier> suppliers = new ArrayList<>();
+        IGenericService<Supplier> supplierService = new GenericServiceImpl<>(Supplier.class, HibernateUtil.getSessionFactory());
+        suppliers = supplierService.getAll();
+        return suppliers;
+    }
+    private  static void saveSupplier01(Supplier supplier){
+        IGenericService<Supplier> supplierService = new GenericServiceImpl<>(Supplier.class, HibernateUtil.getSessionFactory());
+        supplierService.save(supplier);
+    }
+    private  static void deleteSupplier(Supplier supplier){
+        IGenericService<Supplier> supplierService = new GenericServiceImpl<>(Supplier.class, HibernateUtil.getSessionFactory());
+        supplierService.delete(supplier);
+    }
+    private static void updateSupplier(Supplier supplier){
+        IGenericService<Supplier> supplierService = new GenericServiceImpl<>(Supplier.class, HibernateUtil.getSessionFactory());
+        supplierService.update(supplier);
+    }
+
 }
 
 

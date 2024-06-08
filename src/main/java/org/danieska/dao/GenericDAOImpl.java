@@ -12,7 +12,10 @@ public class GenericDAOImpl <T> implements IGenericDao<T>{
     private SessionFactory sessionFactory;
     public GenericDAOImpl(Class<T> cl, SessionFactory sessionFactory){
         this.sessionFactory = sessionFactory;
-        throw new RuntimeException("La fabrica de session es nula ! ! !");
+        if (sessionFactory == null){
+            throw new RuntimeException("La fabrica de session es nula ! ! !");
+        }
+
     }
     @Override
     public T get(Class<T> cl, Integer id) {
@@ -33,7 +36,7 @@ public class GenericDAOImpl <T> implements IGenericDao<T>{
         session.beginTransaction();
         session.save(object);
         session.getTransaction().commit();
-        return null;
+        return object;
     }
 
     @Override

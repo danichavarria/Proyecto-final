@@ -1,5 +1,6 @@
 package org.danieska;
-import org.danieska.entity.Cliente;
+import org.danieska.entity.Cliente01;
+import org.danieska.entity.User;
 import org.danieska.services.GenericServiceImpl;
 import org.danieska.services.IGenericService;
 import org.danieska.util.HibernateUtil;
@@ -8,10 +9,8 @@ import org.hibernate.Transaction;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JOptionPane;
@@ -22,8 +21,7 @@ public class App {
     JTextField usernameField;
     JPasswordField passwordField;
     JButton loginButton;
-
-
+    private List<User>usuarios;
     public App() {
         JFrame frame = new JFrame();
 
@@ -38,7 +36,7 @@ public class App {
         usernameField = new JTextField();
         passwordField = new JPasswordField();
         loginButton = new JButton("Enviar");
-
+        subirUser();
 
         loginButton.addActionListener(new ActionListener() {
             @Override
@@ -48,13 +46,16 @@ public class App {
                 String password = new String(passwordField.getPassword());
 
 
-                if (username.equals("usuario") && password.equals("contrasena")) {
+                if (username.equals("") && password.equals("")) {
                     JOptionPane.showMessageDialog(null, "¡Envio exitoso!");
+
                     new MainApp();
                 } else {
                     JOptionPane.showMessageDialog(null, "Nombre de usuario o contraseña incorrectos", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
+
+
 
         });
 
@@ -74,26 +75,23 @@ public class App {
 
     }
 
-    private static void guardarUser(Cliente cliente) {
-        Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            transaction = session.beginTransaction();
-            session.save(cliente);
-            transaction.commit();
-        } catch (Exception e) {
-            e.printStackTrace();
-            {
-                if (transaction != null) {
-                    transaction.rollback();
-                }
-            }
-        }
+    public void subirUser(){
+
+        User usuario= new User("Admin","1234");
+        guardarUser(usuario);
+        usuarios=getUser();
     }
 
+    private List<User> getUser(){
+        IGenericService<User> usuario= new GenericServiceImpl<>(User.class,HibernateUtil.getSessionFactory());
+        return usuario.getAll();
+    }
+    public void guardarUser(User user){
+        IGenericService<User> usuario = new GenericServiceImpl<>(User.class,HibernateUtil.getSessionFactory());
+        usuario.save(user);
+    }
 
-
-
-        public static void main (String[]args){
+    public static void main (String[]args){
             new App();
         }
 

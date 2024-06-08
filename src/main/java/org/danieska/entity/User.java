@@ -3,7 +3,7 @@ package org.danieska.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "User")
+@Table(name = "Usuarios")
 
 public class User {
     @Id
@@ -11,7 +11,7 @@ public class User {
     @Column(name = "id")
     private int id;
 
-    @Column(name = "User")
+    @Column(name = "Usuarios")
     private String user;
 
     @Column(name = "password")
